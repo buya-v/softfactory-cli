@@ -93,6 +93,10 @@ export const FactoryStateSchema = z.object({
   memory_patterns: z.array(z.string()).default([]),
   /** Tokens the run has consumed across every attempt, where backends report them. */
   usage: z.object({ input_tokens: z.number().default(0), output_tokens: z.number().default(0) }).default({ input_tokens: 0, output_tokens: 0 }),
+  /** Tokens consumed per model, where backends report them. Optional so old state files still parse. */
+  usage_by_model: z.record(z.object({ input: z.number(), output: z.number() })).optional(),
+  /** The outcome of the run's UAT gate: passed, failed, skipped (--no-uat) or none (no UAT defined). Optional for old state files. */
+  uat_result: z.enum(['passed', 'failed', 'skipped', 'none']).optional(),
   /** Where the requirement came from, when it was not typed on the command line. */
   source: z.object({ kind: z.literal('issue'), number: z.number(), url: z.string(), title: z.string() }).optional(),
   /** PR mode: passing tasks merge here instead of the base branch, and the branch becomes a pull request. */
